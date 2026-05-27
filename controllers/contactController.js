@@ -5,7 +5,6 @@ const sendMessage = async (req, res) => {
   try {
     const { name, email, subject, message } = req.body;
 
-    // Validate all fields
     if (!name || !email || !subject || !message) {
       return res.status(400).json({
         success: false,
@@ -18,7 +17,7 @@ const sendMessage = async (req, res) => {
 
     // Send email
     const mailOptions = {
-      from: `"${name}" <${process.env.EMAIL_USER}>`,
+      from: "onboarding@resend.dev",       // use this until you verify a domain
       to: process.env.RECEIVER_EMAIL,
       replyTo: email,
       subject: `New Contact Form: ${subject}`,
