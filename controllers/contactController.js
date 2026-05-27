@@ -1,5 +1,5 @@
 const Message = require("../models/Message");
-const transporter = require("../config/mailer");
+const sendEmail = require("../config/mailer");
 
 const sendMessage = async (req, res) => {
   try {
@@ -12,12 +12,9 @@ const sendMessage = async (req, res) => {
       });
     }
 
-    // Save to MongoDB
     await Message.create({ name, email, subject, message });
 
-    // Send email
-    const mailOptions = {
-      from: "onboarding@resend.dev",       // use this until you verify a domain
+    await sendEmail({
       to: process.env.RECEIVER_EMAIL,
       replyTo: email,
       subject: `New Contact Form: ${subject}`,
@@ -38,9 +35,7 @@ const sendMessage = async (req, res) => {
           </p>
         </div>
       `,
-    };
-
-    await transporter.sendMail(mailOptions);
+    });
 
     return res.status(200).json({
       success: true,
